@@ -13,6 +13,7 @@ import (
 	"github.com/elastic/go-elasticsearch/v7/esutil"
 	"github.com/sfomuseum/go-flags/flagset"
 	"github.com/sfomuseum/go-flags/lookup"
+	"github.com/sfomuseum/go-twitter-elasticsearch/document"
 	"github.com/tidwall/gjson"
 	"log"
 	"os"
@@ -137,14 +138,14 @@ func RunBulkIndexerWithFlagSet(ctx context.Context, fs *flag.FlagSet) (*esutil.B
 
 		for _, tw := range posts {
 
-			enc_tw, err := json.Marshal(tw)
+			tw_body, err := json.Marshal(tw)
 
 			if err != nil {
 				msg := fmt.Sprintf("Failed to marshal %s, %v", path, err)
 				return errors.New(msg)
 			}
 
-			id_rsp := gjson.GetBytes(enc_tw, "id")
+			id_rsp := gjson.GetBytes(tw_body, "id")
 
 			if !id_rsp.Exists() {
 				return errors.New("Can't find ID")
@@ -152,12 +153,18 @@ func RunBulkIndexerWithFlagSet(ctx context.Context, fs *flag.FlagSet) (*esutil.B
 
 			doc_id := id_rsp.String()
 
+			tw_body, err = document.AppendCreatedAtTimestamp(ctx, tw_body)
+
+			if err != nil {
+				return err
+			}
+
 			// log.Println(string(enc_f))
 
 			bulk_item := esutil.BulkIndexerItem{
 				Action:     "index",
 				DocumentID: doc_id,
-				Body:       bytes.NewReader(enc_tw),
+				Body:       bytes.NewReader(tw_body),
 
 				OnSuccess: func(ctx context.Context, item esutil.BulkIndexerItem, res esutil.BulkIndexerResponseItem) {
 					// log.Printf("Indexed %s\n", path)
