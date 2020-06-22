@@ -25,13 +25,21 @@ const FLAG_ES_ENDPOINT string = "elasticsearch-endpoint"
 const FLAG_ES_INDEX string = "elasticsearch-index"
 const FLAG_WORKERS string = "workers"
 
+const FLAG_APPEND_TIMESTAMP string = "append-timestamp"
+const FLAG_APPEND_UNSHORTENED_URLS string = "append-unshortened-urls"
+const FLAG_APPEND_ALL string = "append-all"
+
 func NewBulkIndexerFlagSet(ctx context.Context) (*flag.FlagSet, error) {
 
 	fs := flagset.NewFlagSet("bulk")
 
-	fs.String(FLAG_ES_ENDPOINT, "http://localhost:9200", "...")
-	fs.String(FLAG_ES_INDEX, "twitter", "...")
-	fs.Int(FLAG_WORKERS, runtime.NumCPU(), "...")
+	fs.String(FLAG_ES_ENDPOINT, "http://localhost:9200", "The URL of your Elasticsearch endpoint.")
+	fs.String(FLAG_ES_INDEX, "twitter", "The name of your Elasticsearch index.")
+	fs.Int(FLAG_WORKERS, runtime.NumCPU(), "The number of concurrent indexers")
+
+	fs.Bool(FLAG_APPEND_TIMESTAMP, true, "Append a Unix timestamp to each post.")
+	fs.Bool(FLAG_APPEND_UNSHORTENED_URLS, true, "Append unshortened URLs to each post.")
+	fs.Bool(FLAG_APPEND_ALL, false, "Enable all -append related flags.")
 
 	// debug := fs.Bool("debug", false, "...")
 
@@ -56,6 +64,30 @@ func RunBulkIndexerWithFlagSet(ctx context.Context, fs *flag.FlagSet) (*esutil.B
 
 	if err != nil {
 		return nil, err
+	}
+
+	append_timestamp, err := lookup.BoolVar(fs, FLAG_APPEND_TIMESTAMP)
+
+	if err != nil {
+		return nil, err
+	}
+
+	append_unshortened_urls, err := lookup.BoolVar(fs, FLAG_APPEND_UNSHORTENED_URLS)
+
+	if err != nil {
+		return nil, err
+	}
+
+	append_all, err := lookup.BoolVar(fs, FLAG_APPEND_ALL)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if append_all {
+
+		append_timestamp = true
+		append_unshortened_urls = true
 	}
 
 	retry := backoff.NewExponentialBackOff()
@@ -153,10 +185,20 @@ func RunBulkIndexerWithFlagSet(ctx context.Context, fs *flag.FlagSet) (*esutil.B
 
 			doc_id := id_rsp.String()
 
-			tw_body, err = document.AppendCreatedAtTimestamp(ctx, tw_body)
+			if append_timestamp {
+				tw_body, err = document.AppendCreatedAtTimestamp(ctx, tw_body)
 
-			if err != nil {
-				return err
+				if err != nil {
+					return err
+				}
+			}
+
+			if append_unshortened_urls {
+				tw_body, err = document.AppendUnshortenedURLs(ctx, tw_body)
+
+				if err != nil {
+					return err
+				}
 			}
 
 			// log.Println(string(enc_f))
