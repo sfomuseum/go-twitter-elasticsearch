@@ -41,8 +41,6 @@ func NewBulkIndexerFlagSet(ctx context.Context) (*flag.FlagSet, error) {
 	fs.Bool(FLAG_APPEND_UNSHORTENED_URLS, true, "Append unshortened URLs to each post.")
 	fs.Bool(FLAG_APPEND_ALL, false, "Enable all -append related flags.")
 
-	// debug := fs.Bool("debug", false, "...")
-
 	return fs, nil
 }
 

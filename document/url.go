@@ -64,7 +64,8 @@ func AppendUnshortenedURLs(ctx context.Context, body []byte) ([]byte, error) {
 			return nil, err
 		}
 
-		log.Println(path, u.String())
+		// log.Println(path, u.String())
+		// log.Println(string(body))
 	}
 
 	return body, nil
