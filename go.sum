@@ -7,6 +7,8 @@ github.com/elastic/go-elasticsearch/v7 v7.8.0 h1:M9D55OK13IEgg51Jb57mZgseag1Asnc
 github.com/elastic/go-elasticsearch/v7 v7.8.0/go.mod h1:OJ4wdbtDNk5g503kvlHLyErCgQwwzmDtaFC4XyOxXA4=
 github.com/sfomuseum/go-flags v0.3.1 h1:6QZwQz1Dgy6t8ty+S7aR3iBSq8+0UR5/R3SNXHC8xxI=
 github.com/sfomuseum/go-flags v0.3.1/go.mod h1:54KCZIGmvZkIOrSCHSNMvgSTKH2gJRJyISH+AiI+55w=
+github.com/sfomuseum/go-url-unshortener v0.1.0 h1:fQCurlj/JXxoLdRlG+dpKA/EQVd7EmaVg6gEgjqjjlE=
+github.com/sfomuseum/go-url-unshortener v0.1.0/go.mod h1:virKIev2O0mT5EDp8FrjjA/63mBffflb0zRXXebcaKk=
 github.com/tidwall/gjson v1.6.0 h1:9VEQWz6LLMUsUl6PueE49ir4Ka6CzLymOAZDxpFsTDc=
 github.com/tidwall/gjson v1.6.0/go.mod h1:P256ACg0Mn+j1RXIDXoss50DeIABTYK1PULOJHhxOls=
 github.com/tidwall/match v1.0.1 h1:PnKP62LPNxHKTwvHHZZzdOAOCtsJTjo6dZLCwpKm5xc=
