@@ -8,10 +8,10 @@ This is work in progress. Documentation to follow.
 
 ## Tools
 
-### bulk
+### es-twitter-index
 
 ```
-go run -mod vendor cmd/bulk/main.go -h
+> go run -mod vendor cmd/es-twitter-index/main.go -h
   -append-all
 	Enable all -append related flags.
   -append-timestamp
@@ -23,7 +23,7 @@ go run -mod vendor cmd/bulk/main.go -h
   -elasticsearch-index string
     		       The name of your Elasticsearch index. (default "twitter")
   -workers int
-    	   The number of concurrent indexers (default 1)
+    	   The number of concurrent indexers (default 2)
 ```
 
 ## Notes
