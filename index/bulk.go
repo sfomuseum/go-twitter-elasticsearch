@@ -157,7 +157,11 @@ func RunBulkIndexerWithFlagSet(ctx context.Context, fs *flag.FlagSet) (*esutil.B
 
 		defer fh.Close()
 
-		var posts []interface{}
+		type post struct {
+			Tweet interface{} `json:"tweet"`
+		}
+
+		var posts []post
 
 		dec := json.NewDecoder(fh)
 		err = dec.Decode(&posts)
@@ -166,9 +170,9 @@ func RunBulkIndexerWithFlagSet(ctx context.Context, fs *flag.FlagSet) (*esutil.B
 			return err
 		}
 
-		for _, tw := range posts {
+		for _, p := range posts {
 
-			tw_body, err := json.Marshal(tw)
+			tw_body, err := json.Marshal(p.Tweet)
 
 			if err != nil {
 				msg := fmt.Sprintf("Failed to marshal %s, %v", path, err)
@@ -178,6 +182,7 @@ func RunBulkIndexerWithFlagSet(ctx context.Context, fs *flag.FlagSet) (*esutil.B
 			id_rsp := gjson.GetBytes(tw_body, "id")
 
 			if !id_rsp.Exists() {
+				log.Println(string(tw_body))
 				return errors.New("Can't find ID")
 			}
 
