@@ -38,6 +38,9 @@ $> ./bin/es-twitter-index -append-all /usr/local/data/tweet.js
 2020/10/02 12:08:18 http://ow.ly/uAWZH Head "https://blogs.sfweekly.com/exhibitionist/2014/03/sf_filters_top_10_san_francisc.php": x509: certificate is valid for *.fdncms.com, fdncms.com, not blogs.sfweekly.com
 2020/10/02 12:08:52 http://buzz.mw/bppwg_f Head "http://buzz.mw/bppwg_f": dial tcp: lookup buzz.mw on 0.0.0.0:53: no such host
 ...
+2020/10/02 13:11:16 http://flip.it/qqf1w Head "https://ow.ly/m7tQE": dial tcp 54.183.130.144:443: connect: connection refused
+2020/10/02 13:12:38 Processed files in 1h10m48.347998179s
+{"NumAdded":9759,"NumFlushed":9759,"NumFailed":0,"NumIndexed":9759,"NumCreated":0,"NumUpdated":0,"NumDeleted":0,"NumRequests":142}
 ```
 
 ## Notes
