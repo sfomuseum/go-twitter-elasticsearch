@@ -2,7 +2,7 @@
 // Elasticsearch B.V. licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information.
 //
-// Code generated from specification version 7.8.0: DO NOT EDIT
+// Code generated from specification version 7.9.0: DO NOT EDIT
 
 package esapi
 
@@ -13,9 +13,9 @@ import (
 	"strings"
 )
 
-func newIndicesCreateDataStreamFunc(t Transport) IndicesCreateDataStream {
-	return func(name string, body io.Reader, o ...func(*IndicesCreateDataStreamRequest)) (*Response, error) {
-		var r = IndicesCreateDataStreamRequest{Name: name, Body: body}
+func newMLUpdateDataFrameAnalyticsFunc(t Transport) MLUpdateDataFrameAnalytics {
+	return func(id string, body io.Reader, o ...func(*MLUpdateDataFrameAnalyticsRequest)) (*Response, error) {
+		var r = MLUpdateDataFrameAnalyticsRequest{DocumentID: id, Body: body}
 		for _, f := range o {
 			f(&r)
 		}
@@ -25,20 +25,20 @@ func newIndicesCreateDataStreamFunc(t Transport) IndicesCreateDataStream {
 
 // ----- API Definition -------------------------------------------------------
 
-// IndicesCreateDataStream creates or updates a data stream
+// MLUpdateDataFrameAnalytics - Updates certain properties of a data frame analytics job.
 //
 // This API is experimental.
 //
-// See full documentation at https://www.elastic.co/guide/en/elasticsearch/reference/master/data-streams.html.
+// See full documentation at https://www.elastic.co/guide/en/elasticsearch/reference/current/update-dfanalytics.html.
 //
-type IndicesCreateDataStream func(name string, body io.Reader, o ...func(*IndicesCreateDataStreamRequest)) (*Response, error)
+type MLUpdateDataFrameAnalytics func(id string, body io.Reader, o ...func(*MLUpdateDataFrameAnalyticsRequest)) (*Response, error)
 
-// IndicesCreateDataStreamRequest configures the Indices Create Data Stream API request.
+// MLUpdateDataFrameAnalyticsRequest configures the ML Update Data Frame Analytics API request.
 //
-type IndicesCreateDataStreamRequest struct {
+type MLUpdateDataFrameAnalyticsRequest struct {
+	DocumentID string
+
 	Body io.Reader
-
-	Name string
 
 	Pretty     bool
 	Human      bool
@@ -52,20 +52,26 @@ type IndicesCreateDataStreamRequest struct {
 
 // Do executes the request and returns response or error.
 //
-func (r IndicesCreateDataStreamRequest) Do(ctx context.Context, transport Transport) (*Response, error) {
+func (r MLUpdateDataFrameAnalyticsRequest) Do(ctx context.Context, transport Transport) (*Response, error) {
 	var (
 		method string
 		path   strings.Builder
 		params map[string]string
 	)
 
-	method = "PUT"
+	method = "POST"
 
-	path.Grow(1 + len("_data_stream") + 1 + len(r.Name))
+	path.Grow(1 + len("_ml") + 1 + len("data_frame") + 1 + len("analytics") + 1 + len(r.DocumentID) + 1 + len("_update"))
 	path.WriteString("/")
-	path.WriteString("_data_stream")
+	path.WriteString("_ml")
 	path.WriteString("/")
-	path.WriteString(r.Name)
+	path.WriteString("data_frame")
+	path.WriteString("/")
+	path.WriteString("analytics")
+	path.WriteString("/")
+	path.WriteString(r.DocumentID)
+	path.WriteString("/")
+	path.WriteString("_update")
 
 	params = make(map[string]string)
 
@@ -134,48 +140,48 @@ func (r IndicesCreateDataStreamRequest) Do(ctx context.Context, transport Transp
 
 // WithContext sets the request context.
 //
-func (f IndicesCreateDataStream) WithContext(v context.Context) func(*IndicesCreateDataStreamRequest) {
-	return func(r *IndicesCreateDataStreamRequest) {
+func (f MLUpdateDataFrameAnalytics) WithContext(v context.Context) func(*MLUpdateDataFrameAnalyticsRequest) {
+	return func(r *MLUpdateDataFrameAnalyticsRequest) {
 		r.ctx = v
 	}
 }
 
 // WithPretty makes the response body pretty-printed.
 //
-func (f IndicesCreateDataStream) WithPretty() func(*IndicesCreateDataStreamRequest) {
-	return func(r *IndicesCreateDataStreamRequest) {
+func (f MLUpdateDataFrameAnalytics) WithPretty() func(*MLUpdateDataFrameAnalyticsRequest) {
+	return func(r *MLUpdateDataFrameAnalyticsRequest) {
 		r.Pretty = true
 	}
 }
 
 // WithHuman makes statistical values human-readable.
 //
-func (f IndicesCreateDataStream) WithHuman() func(*IndicesCreateDataStreamRequest) {
-	return func(r *IndicesCreateDataStreamRequest) {
+func (f MLUpdateDataFrameAnalytics) WithHuman() func(*MLUpdateDataFrameAnalyticsRequest) {
+	return func(r *MLUpdateDataFrameAnalyticsRequest) {
 		r.Human = true
 	}
 }
 
 // WithErrorTrace includes the stack trace for errors in the response body.
 //
-func (f IndicesCreateDataStream) WithErrorTrace() func(*IndicesCreateDataStreamRequest) {
-	return func(r *IndicesCreateDataStreamRequest) {
+func (f MLUpdateDataFrameAnalytics) WithErrorTrace() func(*MLUpdateDataFrameAnalyticsRequest) {
+	return func(r *MLUpdateDataFrameAnalyticsRequest) {
 		r.ErrorTrace = true
 	}
 }
 
 // WithFilterPath filters the properties of the response body.
 //
-func (f IndicesCreateDataStream) WithFilterPath(v ...string) func(*IndicesCreateDataStreamRequest) {
-	return func(r *IndicesCreateDataStreamRequest) {
+func (f MLUpdateDataFrameAnalytics) WithFilterPath(v ...string) func(*MLUpdateDataFrameAnalyticsRequest) {
+	return func(r *MLUpdateDataFrameAnalyticsRequest) {
 		r.FilterPath = v
 	}
 }
 
 // WithHeader adds the headers to the HTTP request.
 //
-func (f IndicesCreateDataStream) WithHeader(h map[string]string) func(*IndicesCreateDataStreamRequest) {
-	return func(r *IndicesCreateDataStreamRequest) {
+func (f MLUpdateDataFrameAnalytics) WithHeader(h map[string]string) func(*MLUpdateDataFrameAnalyticsRequest) {
+	return func(r *MLUpdateDataFrameAnalyticsRequest) {
 		if r.Header == nil {
 			r.Header = make(http.Header)
 		}
@@ -187,8 +193,8 @@ func (f IndicesCreateDataStream) WithHeader(h map[string]string) func(*IndicesCr
 
 // WithOpaqueID adds the X-Opaque-Id header to the HTTP request.
 //
-func (f IndicesCreateDataStream) WithOpaqueID(s string) func(*IndicesCreateDataStreamRequest) {
-	return func(r *IndicesCreateDataStreamRequest) {
+func (f MLUpdateDataFrameAnalytics) WithOpaqueID(s string) func(*MLUpdateDataFrameAnalyticsRequest) {
+	return func(r *MLUpdateDataFrameAnalyticsRequest) {
 		if r.Header == nil {
 			r.Header = make(http.Header)
 		}

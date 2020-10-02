@@ -2,7 +2,7 @@
 // Elasticsearch B.V. licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information.
 //
-// Code generated from specification version 7.8.0: DO NOT EDIT
+// Code generated from specification version 7.9.0: DO NOT EDIT
 
 package esapi
 
@@ -12,9 +12,9 @@ import (
 	"strings"
 )
 
-func newIndicesDeleteDataStreamFunc(t Transport) IndicesDeleteDataStream {
-	return func(name string, o ...func(*IndicesDeleteDataStreamRequest)) (*Response, error) {
-		var r = IndicesDeleteDataStreamRequest{Name: name}
+func newIndicesResolveIndexFunc(t Transport) IndicesResolveIndex {
+	return func(name []string, o ...func(*IndicesResolveIndexRequest)) (*Response, error) {
+		var r = IndicesResolveIndexRequest{Name: name}
 		for _, f := range o {
 			f(&r)
 		}
@@ -24,18 +24,20 @@ func newIndicesDeleteDataStreamFunc(t Transport) IndicesDeleteDataStream {
 
 // ----- API Definition -------------------------------------------------------
 
-// IndicesDeleteDataStream deletes a data stream.
+// IndicesResolveIndex returns information about any matching indices, aliases, and data streams
 //
 // This API is experimental.
 //
-// See full documentation at https://www.elastic.co/guide/en/elasticsearch/reference/master/data-streams.html.
+// See full documentation at https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-resolve-index-api.html.
 //
-type IndicesDeleteDataStream func(name string, o ...func(*IndicesDeleteDataStreamRequest)) (*Response, error)
+type IndicesResolveIndex func(name []string, o ...func(*IndicesResolveIndexRequest)) (*Response, error)
 
-// IndicesDeleteDataStreamRequest configures the Indices Delete Data Stream API request.
+// IndicesResolveIndexRequest configures the Indices Resolve Index API request.
 //
-type IndicesDeleteDataStreamRequest struct {
-	Name string
+type IndicesResolveIndexRequest struct {
+	Name []string
+
+	ExpandWildcards string
 
 	Pretty     bool
 	Human      bool
@@ -49,22 +51,28 @@ type IndicesDeleteDataStreamRequest struct {
 
 // Do executes the request and returns response or error.
 //
-func (r IndicesDeleteDataStreamRequest) Do(ctx context.Context, transport Transport) (*Response, error) {
+func (r IndicesResolveIndexRequest) Do(ctx context.Context, transport Transport) (*Response, error) {
 	var (
 		method string
 		path   strings.Builder
 		params map[string]string
 	)
 
-	method = "DELETE"
+	method = "GET"
 
-	path.Grow(1 + len("_data_stream") + 1 + len(r.Name))
+	path.Grow(1 + len("_resolve") + 1 + len("index") + 1 + len(strings.Join(r.Name, ",")))
 	path.WriteString("/")
-	path.WriteString("_data_stream")
+	path.WriteString("_resolve")
 	path.WriteString("/")
-	path.WriteString(r.Name)
+	path.WriteString("index")
+	path.WriteString("/")
+	path.WriteString(strings.Join(r.Name, ","))
 
 	params = make(map[string]string)
+
+	if r.ExpandWildcards != "" {
+		params["expand_wildcards"] = r.ExpandWildcards
+	}
 
 	if r.Pretty {
 		params["pretty"] = "true"
@@ -127,48 +135,56 @@ func (r IndicesDeleteDataStreamRequest) Do(ctx context.Context, transport Transp
 
 // WithContext sets the request context.
 //
-func (f IndicesDeleteDataStream) WithContext(v context.Context) func(*IndicesDeleteDataStreamRequest) {
-	return func(r *IndicesDeleteDataStreamRequest) {
+func (f IndicesResolveIndex) WithContext(v context.Context) func(*IndicesResolveIndexRequest) {
+	return func(r *IndicesResolveIndexRequest) {
 		r.ctx = v
+	}
+}
+
+// WithExpandWildcards - whether wildcard expressions should get expanded to open or closed indices (default: open).
+//
+func (f IndicesResolveIndex) WithExpandWildcards(v string) func(*IndicesResolveIndexRequest) {
+	return func(r *IndicesResolveIndexRequest) {
+		r.ExpandWildcards = v
 	}
 }
 
 // WithPretty makes the response body pretty-printed.
 //
-func (f IndicesDeleteDataStream) WithPretty() func(*IndicesDeleteDataStreamRequest) {
-	return func(r *IndicesDeleteDataStreamRequest) {
+func (f IndicesResolveIndex) WithPretty() func(*IndicesResolveIndexRequest) {
+	return func(r *IndicesResolveIndexRequest) {
 		r.Pretty = true
 	}
 }
 
 // WithHuman makes statistical values human-readable.
 //
-func (f IndicesDeleteDataStream) WithHuman() func(*IndicesDeleteDataStreamRequest) {
-	return func(r *IndicesDeleteDataStreamRequest) {
+func (f IndicesResolveIndex) WithHuman() func(*IndicesResolveIndexRequest) {
+	return func(r *IndicesResolveIndexRequest) {
 		r.Human = true
 	}
 }
 
 // WithErrorTrace includes the stack trace for errors in the response body.
 //
-func (f IndicesDeleteDataStream) WithErrorTrace() func(*IndicesDeleteDataStreamRequest) {
-	return func(r *IndicesDeleteDataStreamRequest) {
+func (f IndicesResolveIndex) WithErrorTrace() func(*IndicesResolveIndexRequest) {
+	return func(r *IndicesResolveIndexRequest) {
 		r.ErrorTrace = true
 	}
 }
 
 // WithFilterPath filters the properties of the response body.
 //
-func (f IndicesDeleteDataStream) WithFilterPath(v ...string) func(*IndicesDeleteDataStreamRequest) {
-	return func(r *IndicesDeleteDataStreamRequest) {
+func (f IndicesResolveIndex) WithFilterPath(v ...string) func(*IndicesResolveIndexRequest) {
+	return func(r *IndicesResolveIndexRequest) {
 		r.FilterPath = v
 	}
 }
 
 // WithHeader adds the headers to the HTTP request.
 //
-func (f IndicesDeleteDataStream) WithHeader(h map[string]string) func(*IndicesDeleteDataStreamRequest) {
-	return func(r *IndicesDeleteDataStreamRequest) {
+func (f IndicesResolveIndex) WithHeader(h map[string]string) func(*IndicesResolveIndexRequest) {
+	return func(r *IndicesResolveIndexRequest) {
 		if r.Header == nil {
 			r.Header = make(http.Header)
 		}
@@ -180,8 +196,8 @@ func (f IndicesDeleteDataStream) WithHeader(h map[string]string) func(*IndicesDe
 
 // WithOpaqueID adds the X-Opaque-Id header to the HTTP request.
 //
-func (f IndicesDeleteDataStream) WithOpaqueID(s string) func(*IndicesDeleteDataStreamRequest) {
-	return func(r *IndicesDeleteDataStreamRequest) {
+func (f IndicesResolveIndex) WithOpaqueID(s string) func(*IndicesResolveIndexRequest) {
+	return func(r *IndicesResolveIndexRequest) {
 		if r.Header == nil {
 			r.Header = make(http.Header)
 		}
